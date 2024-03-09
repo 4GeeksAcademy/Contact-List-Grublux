@@ -1,3 +1,10 @@
 /* 
     General Styles
 */
+/* .rounded-circle {
+    max-width: 227px;
+} */
+
+.toRight {
+    float: right;
+}
