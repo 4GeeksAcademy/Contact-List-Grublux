@@ -1,10 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../layout";
+import { useNavigate } from "react-router-dom";
 
 export const EditContact = () => {
 
-    const { myContacts, setMyContacts, tempID, setTempID } = useContext(AppContext);
+    const navigate = useNavigate();
+
+    const { myContacts, setMyContacts, tempID, setTempID, storedUserName, setStoredUserName } = useContext(AppContext);
 
     const [fullName, setFullName] = useState("");
     const [userEmail, setUserEmail] = useState("");
@@ -73,6 +76,9 @@ export const EditContact = () => {
                     setMyContacts(responseAsJson);
                     console.log(responseAsJson);
                 }))
+            .then(
+                () => navigate('/')
+            )
             .catch(error => console.error(error));
 
     }
@@ -102,7 +108,7 @@ export const EditContact = () => {
                         <input type="text" className="form-control mb-3" placeholder="Enter address"
                             onChange={e => setUserAddress(e.target.value)} value={userAddress} required />
                     </div>
-                    <Link type="button" className="btn btn-primary form-control" to="/"
+                    <Link type="button" className="btn btn-primary form-control"
                         onClick={() => {
                             addUser();
 

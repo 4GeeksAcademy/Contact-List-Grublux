@@ -12,6 +12,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { AddContact } from "./views/AddContact";
 import { Contacts } from "./views/Contact";
+import { Sucess } from "./views/sucess";
 
 export const AppContext = React.createContext(null);
 
@@ -27,15 +28,18 @@ const Layout = () => {
 
 	const [tempID, setTempID] = useState("");
 
+	const [storedUserName, setStoredUserName] = useState("");
+
 	return (
 		<div>
-			<AppContext.Provider value={{ myContacts, setMyContacts, tempID, setTempID }}>
+			<AppContext.Provider value={{ myContacts, setMyContacts, tempID, setTempID, storedUserName, setStoredUserName }}>
 				<BrowserRouter basename={basename}>
 					<ScrollToTop>
 						{/* <Navbar /> */}
 						<Routes>
 							<Route path="/" element={<Home />} />
 							<Route path="/edit" element={<EditContact />} />
+							<Route path="/sucess" element={<Sucess />} />
 							<Route path="/contacts" element={<Contacts />} />
 							<Route path="/add" element={<AddContact />} />
 							<Route path="/demo" element={<Demo />} />

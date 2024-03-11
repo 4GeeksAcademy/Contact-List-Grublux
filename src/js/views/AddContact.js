@@ -1,36 +1,60 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, } from "react-router-dom";
 import { AppContext } from "../layout";
+import { useNavigate } from "react-router-dom";
 
 export const AddContact = () => {
 
+	const navigate = useNavigate();
 
+	const [formStyle, setFormStyle] = useState("form-control")
+
+	// state = {
+	// 	redirect: false,
+	// }
 
 
 	const addUser = () => {
-		fetch('https://playground.4geeks.com/apis/fake/contact/', {
-			method: 'POST',
-			body: JSON.stringify(
-				{
-					"full_name": `${fullName}`,
-					"email": `${userEmail}`,
-					"agenda_slug": "Grublux",
-					"address": `${userAddress}`,
-					"phone": `${userPhone}`
+
+
+
+		if (fullName.length > 0 && userEmail.length > 0 && userPhone.length > 0 && userAddress.length > 0) {
+
+			fetch('https://playground.4geeks.com/apis/fake/contact/', {
+				method: 'POST',
+				body: JSON.stringify(
+					{
+						"full_name": `${fullName}`,
+						"email": `${userEmail}`,
+						"agenda_slug": "Grublux",
+						"address": `${userAddress}`,
+						"phone": `${userPhone}`
+					}
+				), // data can be a 'string' or an {object} which comes from somewhere further above in our application
+
+
+				headers: {
+					'Content-Type': 'application/json'
 				}
-			), // data can be a 'string' or an {object} which comes from somewhere further above in our application
-
-
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-			.then(res => {
-				if (!res.ok) throw Error(res.statusText);
-				return res.json();
 			})
-			.then(response => console.log('Success:', response))
-			.catch(error => console.error(error));
+
+				.then(res => {
+					if (!res.ok) throw Error(res.statusText);
+					// if (res.ok) useNavigate('/');
+					return res.json();
+				})
+				.then(
+					() => navigate('/')
+				)
+
+
+				.then(response => console.log('Success:', response))
+				.catch(error => console.error(error));
+		}
+
+		else {
+			alert("You must fill out all fields to submit contact")
+		}
 
 	}
 
@@ -39,7 +63,7 @@ export const AddContact = () => {
 	const [userPhone, setUserPhone] = useState("");
 	const [userAddress, setUserAddress] = useState("");
 
-	const { myContacts, setMyContacts } = useContext(AppContext);
+	const { myContacts, setMyContacts, storedUserName, setStoredUserName } = useContext(AppContext);
 
 	return (
 		<div className="container bg-white pb-5">
@@ -48,8 +72,8 @@ export const AddContact = () => {
 				<form className="p-5">
 					<div className="form-group">
 						<label>Full Name</label>
-						<input type="text" className="form-control" placeholder="Full Name"
-							onChange={e => setFullName(e.target.value)} value={fullName} required />
+						<input required type="text" className="form-control" id="validationCustom03" placeholder="Full Name"
+							onChange={e => setFullName(e.target.value)} value={fullName} />
 					</div>
 					<div className="form-group">
 						<label>Email</label>
@@ -66,14 +90,15 @@ export const AddContact = () => {
 						<input type="text" className="form-control mb-3" placeholder="Enter address"
 							onChange={e => setUserAddress(e.target.value)} value={userAddress} required />
 					</div>
-					<Link type="button" className="btn btn-primary form-control" to="/"
-						onClick={() => {
-							addUser();
+					<button type="submit" className="btn btn-primary form-control"
+						onClick={(event) => {
+							event.preventDefault()
+							addUser()
 						}
 						}
 					>
 						save
-					</Link>
+					</button>
 					<Link className="mt-3 w-100 text-center" to="/">
 						or get back to contacts
 					</Link>
